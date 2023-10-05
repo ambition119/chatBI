@@ -1,0 +1,57 @@
+server:
+  context-path: /chatBI
+  tomcat:
+    accesslog:
+      enabled: false
+      buffered: false
+      directory:
+      pattern: common
+    awaitTerminationInSec: 30
+
+spring:
+  profiles:
+    ## dev, test, prod
+    active: dev
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    druid:
+      filters:
+      # 初始化大小，最小，最大
+      initial-size: 1
+      max-active: 20
+      min-idle: 1
+      # 配置获取连接等待超时的时间
+      max-wait: 5000
+      # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+      time-between-eviction-runs-millis: 60000
+      # 配置一个连接在池中最小生存的时间，单位是毫秒
+      min-evictable-idle-time-millis: 30000
+      validation-query: select 'x'
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      pool-prepared-statements: true
+      max-open-prepared-statements: 20
+      # 配置监控页面密码登录
+#      stat-view-servlet:
+#        login-password: druid
+#        login-username: druid
+  http:
+    multipart:
+      max-file-size: 1024MB
+      max-request-size: 1024MB
+
+mybatis:
+  mapperLocations: classpath:mapper/*.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+
+management:
+  health:
+    redis:
+      enabled: false

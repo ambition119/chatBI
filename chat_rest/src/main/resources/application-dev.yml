@@ -1,0 +1,13 @@
+server:
+  port: 8498
+
+security:
+  basic:
+    enabled=false:
+
+spring:
+  datasource:
+    name: dev
+    url: jdbc:mysql://127.0.0.1:3306/chat_bi?characterEncoding=UTF-8&useSSL=false&allowMultiQueries=true&rewriteBatchedStatements=true
+    username: root
+    password: 123456

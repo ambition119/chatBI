@@ -1,0 +1,90 @@
+<assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2 http://maven.apache.org/xsd/assembly-1.1.2.xsd
+http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2 ">
+  <id>${project.version}</id>
+  <!-- 最终打包成一个用于发布的tar.gz文件 -->
+  <formats>
+    <format>tar.gz</format>
+  </formats>
+
+  <includeBaseDirectory>true</includeBaseDirectory>
+
+  <!-- Adds dependencies to zip package under lib directory -->
+  <dependencySets>
+    <dependencySet>
+      <!-- 不使用项目的artifact，第三方jar不要解压，打包进zip文件的lib目录 -->
+      <!-- <useProjectArtifact>false</useProjectArtifact> -->
+      <outputDirectory>lib</outputDirectory>
+      <unpack>false</unpack>
+    </dependencySet>
+  </dependencySets>
+
+  <fileSets>
+    <!-- 把项目相关的说明文件，打包进zip文件的根目录 -->
+    <fileSet>
+      <directory>${project.basedir}</directory>
+      <outputDirectory>/</outputDirectory>
+      <includes>
+        <include>README*</include>
+        <include>LICENSE*</include>
+        <include>NOTICE*</include>
+      </includes>
+    </fileSet>
+
+    <!-- 把项目的配置文件，打包进zip文件的config目录 -->
+    <fileSet>
+      <directory>src/main/resources</directory>
+      <outputDirectory>config/</outputDirectory>
+      <!-- <fileMode>644</fileMode> 修改权限 -->
+      <includes>
+        <include>*.xml</include>
+        <include>*.yml</include>
+        <include>static/</include>
+        <include>templates/</include>
+        <include>mapper/</include>
+      </includes>
+      <excludes>
+        <exclude>logback-test.xml</exclude>
+        <exclude>generatorConfig.xml</exclude>
+        <exclude>application-*.yml</exclude>
+      </excludes>
+    </fileSet>
+
+    <fileSet>
+      <directory>src/main/resources</directory>
+      <outputDirectory>config/</outputDirectory>
+      <includes>
+        <include>application-${env}.yml</include>
+      </includes>
+    </fileSet>
+
+    <!-- 把项目的脚本文件目录（ src/main/shell ）中的启动脚本文件，打包进zip文件的跟目录 -->
+    <fileSet>
+      <directory>${project.build.scriptSourceDirectory}</directory>
+      <outputDirectory>bin</outputDirectory>
+      <includes>
+        <include>*.*</include>
+      </includes>
+      <filtered>true</filtered>
+      <fileMode>0755</fileMode>
+    </fileSet>
+
+    <fileSet>
+      <directory>src/main/resources/${env}</directory>
+      <outputDirectory>bin</outputDirectory>
+      <includes>
+        <include>setenv.sh</include>
+      </includes>
+    </fileSet>
+
+    <!-- 把项目自己编译出来的jar文件，打包进zip文件的根目录 -->
+    <fileSet>
+      <directory>${project.build.directory}</directory>
+      <outputDirectory></outputDirectory>
+      <includes>
+        <include>*.jar</include>
+      </includes>
+    </fileSet>
+  </fileSets>
+</assembly>
