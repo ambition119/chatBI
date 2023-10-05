@@ -16,7 +16,7 @@ public class AliLLMsUtil {
     private static final Logger LOG = LoggerFactory.getLogger(AliLLMsUtil.class);
 
     static {
-        Constants.apiKey = "sk-547ca0b49140460a8d33f0e7c47c4de0";
+        Constants.apiKey = "sk-547";
     }
 
     public static String getResult(String prompt) throws Exception {
