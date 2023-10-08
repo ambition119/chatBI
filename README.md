@@ -30,13 +30,15 @@ select ${input_dim_names} , ${input_metric_names} from ${get_meta_table_name} wh
     这种sql组装拼接成熟度很高，不一定直接依赖大模型服务，唯一有难点的就是文本中对应条件的解析。
     
 3、 如果维度、度量都来自于多张表，则查找相似匹配的问题对应的答案Sql:
-      ①、如果有对应sql, 则直接应用，可能只组装的就是sql的where条件；
+
+      ①、如果有对应sql, 则直接应用，可能只组装的就是sql的where条件。
+      
       ②、如果有相似sql, 例如2张表的join找2张表join的sql模版则对应需要增加子查询方式与拼接where,  即
 ```sql
 select ${input_dim_names} , ${input_metric_names} from ( ${get_query_sql} ) TT where ${input_dim_conditions}  [group by $s] [order by $s];
 ```
     
-    **属于可选步骤(也可以直接调用大模型能力）**，这里where一般可以，sql引擎都支持谓词下推，但是子查询多列可能带来性能影响，不是所有的sql引擎都支持列剪裁。 同时注意相似如果是2张表join,则不能找3张表join的sql语句去拼接。
+**属于可选步骤(也可以直接调用大模型能力）**，这里where一般可以，sql引擎都支持谓词下推，但是子查询多列可能带来性能影响，不是所有的sql引擎都支持列剪裁。 同时注意相似如果是2张表join,则不能找3张表join的sql语句去拼接。
 
     ③、如果sql为null或者校验error的sql, 则通过提示词(问题、schema)交给大模型推理返回推理生成查询sql。
 
